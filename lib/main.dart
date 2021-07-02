@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/allQA.dart';
+import 'question.dart';
 
 void main() => runApp(Quizzler());
+AllQA allqa = AllQA();
 
 class Quizzler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black87,
+          centerTitle: true,
+          title: Text("Quiz: Sabiha's Life"),
+        ),
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
           child: Padding(
@@ -25,6 +33,8 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Widget> Marks = [];
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +47,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                allqa.getQ(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -61,7 +71,16 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                bool ans = allqa.gettrueAnswer();
+                if (ans == true) {
+               Marks.add(Icon(Icons.check,color: Colors.green))   ;
+                } else {
+                  Marks.add(  Icon(Icons.close,color: Colors.red));
+                }
+
+                setState(() {
+                  allqa.nextQ();
+                });
               },
             ),
           ),
@@ -79,12 +98,23 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                bool ans = allqa.gettrueAnswer();
+                if (ans == false) {
+                 Marks.add(Icon(Icons.check,color: Colors.green)) ;
+                } else {
+                  Marks.add(Icon(Icons.close,color:Colors.red));
+                }
+                setState(() {
+                  allqa.nextQ();
+                });
               },
             ),
           ),
         ),
         //TODO: Add a Row here as your score keeper
+        Row(
+          children: Marks,
+        ),
       ],
     );
   }
